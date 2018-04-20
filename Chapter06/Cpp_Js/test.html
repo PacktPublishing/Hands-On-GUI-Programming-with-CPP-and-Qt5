@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Page Title</title>
+		<script type="text/javascript" src="qrc:///qtwebchannel/qwebchannel.js"></script>
+		<script>
+			var mainwindow;
+		
+			function hello()
+			{
+				document.getElementById("myText").innerHTML = "Something happened!";
+				alert("Good day sir, how are you?");
+			}
+			
+			window.onload = function()
+			{
+				new QWebChannel(qt.webChannelTransport, function(channel)
+				{
+					mainwindow = channel.objects.mainwindow;
+				});
+			}
+			
+			function myFunction()
+			{
+				mainwindow.doSomething();
+			}
+		</script>
+	</head>
+	<body>
+		<p id="myText">Hello World!</p>
+		<button onclick="myFunction()">Do Something</button>
+	</body>
+</html>
