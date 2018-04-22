@@ -10,7 +10,7 @@ MainWindow::MainWindow(QWidget *parent) :
 	scene = new QGraphicsScene(this);
 	ui->graphicsView->setScene(scene);
 
-	connect(scene, SIGNAL(selectionChanged()), this, SLOT(selectionChanged()));
+	connect(scene, &QGraphicsScene::selectionChanged, this, &MainWindow::selectionChanged);
 
 	// Draw simple graphics
 	/*
@@ -27,7 +27,7 @@ MainWindow::MainWindow(QWidget *parent) :
 	ellipse->setFlag(QGraphicsItem::ItemIsMovable);
 	ellipse->setFlag(QGraphicsItem::ItemIsSelectable);
 
-	QGraphicsTextItem* text = scene->addText("Hello World!", QFont("Times", 25));
+	QGraphicsTextItem* text = scene->addText("Hello, World!", QFont("Times", 25));
 	text->setFlag(QGraphicsItem::ItemIsMovable);
 	text->setFlag(QGraphicsItem::ItemIsSelectable);
 	*/
