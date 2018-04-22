@@ -8,11 +8,6 @@ MainWindow::MainWindow(QWidget *parent) :
 	ui->setupUi(this);
 
 	player = new QMediaPlayer(this);
-
-	QVideoWidget* videoWidget = new QVideoWidget(this);
-	ui->movieLayout->addWidget(videoWidget);
-	player->setVideoOutput(videoWidget);
-
 	player->setVolume(ui->volume->value());
 	connect(player, &QMediaPlayer::stateChanged, this, &MainWindow::stateChanged);
 	connect(player, &QMediaPlayer::positionChanged, this, &MainWindow::positionChanged);
@@ -25,7 +20,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_actionOpen_File_triggered()
 {
-	QString fileName = QFileDialog::getOpenFileName(this, "Select Movie File", qApp->applicationDirPath(), "MP4 (*.mp4);;MOV (*.mov)");
+	QString fileName = QFileDialog::getOpenFileName(this, "Select Audio File", qApp->applicationDirPath(), "MP3 (*.mp3);;WAV (*.wav)");
 	QFileInfo fileInfo(fileName);
 
 	player->setMedia(QUrl(fileName));
@@ -33,11 +28,11 @@ void MainWindow::on_actionOpen_File_triggered()
 	if (player->isMetaDataAvailable())
 	{
 		QString albumTitle = player->metaData(QMediaMetaData::AlbumTitle).toString();
-		ui->movieNameDisplay->setText("Playing " + albumTitle);
+		ui->songNameDisplay->setText("Playing " + albumTitle);
 	}
 	else
 	{
-		ui->movieNameDisplay->setText("Playing " + fileInfo.fileName());
+		ui->songNameDisplay->setText("Playing " + fileInfo.fileName());
 	}
 
 	ui->playButton->setEnabled(true);
