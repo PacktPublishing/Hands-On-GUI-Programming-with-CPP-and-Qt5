@@ -7,7 +7,7 @@ MainWindow::MainWindow(QWidget *parent) :
 {
 	ui->setupUi(this);
 
-	imageBuffer = NULL;
+	imageBuffer = nullptr;
 }
 
 MainWindow::~MainWindow()
@@ -33,7 +33,7 @@ void MainWindow::on_actionOpen_triggered()
 
 void MainWindow::resizeImage()
 {
-	if (imageBuffer != NULL)
+	if (imageBuffer != nullptr)
 	{
 		QSize size = ui->imageDisplay->size();
 		QPixmap pixmap = imageBuffer->scaled(size, Qt::KeepAspectRatio);
