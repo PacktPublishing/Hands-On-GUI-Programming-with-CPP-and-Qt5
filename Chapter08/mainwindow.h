@@ -19,9 +19,10 @@ class MainWindow : public QMainWindow
 public:
 	explicit MainWindow(QWidget *parent = 0);
 	~MainWindow();
-
 	void updateLines();
-	void keyReleaseEvent(QKeyEvent* event);
+
+protected:
+	virtual void keyReleaseEvent(QKeyEvent* event);
 
 private:
 	Ui::MainWindow *ui;
