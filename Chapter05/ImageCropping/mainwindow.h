@@ -18,8 +18,10 @@ class MainWindow : public QMainWindow
 public:
 	explicit MainWindow(QWidget *parent = 0);
 	~MainWindow();
-	virtual void paintEvent(QPaintEvent *event);
 	void paintImage(QString fileName, int x, int y);
+
+protected:
+	virtual void paintEvent(QPaintEvent *event);
 
 private slots:
 	void on_browseButton_clicked();
