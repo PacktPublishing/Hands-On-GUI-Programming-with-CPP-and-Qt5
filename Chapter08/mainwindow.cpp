@@ -7,30 +7,19 @@ MainWindow::MainWindow(QWidget *parent) :
 {
 	ui->setupUi(this);
 
-	scene = new QGraphicsScene(this);
-	ui->graphicsView->setScene(scene);
+	connected = false;
+	recording = false;
+	camera = new QCamera();
 
-	connect(scene, &QGraphicsScene::selectionChanged, this, &MainWindow::selectionChanged);
+	qDebug() << QCameraInfo::availableCameras().count();
 
-	// Draw simple graphics
-	/*
-	QBrush greenBrush(Qt::green);
-	QBrush blueBrush(Qt::blue);
-	QPen pen(Qt::black);
-	pen.setWidth(2);
+	QList<QCameraInfo> cameras = QCameraInfo::availableCameras();
+	foreach (const QCameraInfo &cameraInfo, cameras)
+	{
+		qDebug() << cameraInfo.deviceName() << cameraInfo.description() << cameraInfo.position();
 
-	QGraphicsRectItem* rectangle = scene->addRect(80, 0, 80, 80, pen, greenBrush);
-	rectangle->setFlag(QGraphicsItem::ItemIsMovable);
-	rectangle->setFlag(QGraphicsItem::ItemIsSelectable);
-
-	QGraphicsEllipseItem* ellipse = scene->addEllipse(0, -80, 200, 60, pen, blueBrush);
-	ellipse->setFlag(QGraphicsItem::ItemIsMovable);
-	ellipse->setFlag(QGraphicsItem::ItemIsSelectable);
-
-	QGraphicsTextItem* text = scene->addText("Hello, World!", QFont("Times", 25));
-	text->setFlag(QGraphicsItem::ItemIsMovable);
-	text->setFlag(QGraphicsItem::ItemIsSelectable);
-	*/
+		ui->deviceSelection->addItem(cameraInfo.description());
+	}
 }
 
 MainWindow::~MainWindow()
@@ -38,65 +27,90 @@ MainWindow::~MainWindow()
 	delete ui;
 }
 
-void MainWindow::updateLines()
+void MainWindow::connectCamera()
 {
-	if (lines.size() > 0)
+	QList<QCameraInfo> cameras = QCameraInfo::availableCameras();
+	foreach (const QCameraInfo &cameraInfo, cameras)
 	{
-		for (int i = 0; i < lines.size(); i++)
+		qDebug() << cameraInfo.description() << ui->deviceSelection->currentText();
+
+		if (cameraInfo.description() == ui->deviceSelection->currentText())
 		{
-			lines.at(i)->updateLine();
+			camera = new QCamera(cameraInfo);
+			viewfinder = new QCameraViewfinder(this);
+			camera->setViewfinder(viewfinder);
+			ui->webcamLayout->addWidget(viewfinder);
+
+			connect(camera, SIGNAL(error(QCamera::Error)), this, SLOT(cameraError(QCamera::Error)));
+
+			connected = true;
+			ui->connectButton->setText("Disconnect");
+
+			camera->start();
+
+			return;
 		}
 	}
 }
 
-void MainWindow::keyReleaseEvent(QKeyEvent* event)
+void MainWindow::on_connectButton_clicked()
 {
-	qDebug() << "Key pressed: " + event->text();
-
-	if (event->key() == Qt::Key_Delete)
+	if (!connected)
 	{
-		if (scene->selectedItems().size() > 0)
+		connectCamera();
+	}
+	else
+	{
+		camera->stop();
+		viewfinder->deleteLater();
+		ui->connectButton->setText("Connect");
+		connected = false;
+	}
+}
+
+void MainWindow::on_captureButton_clicked()
+{
+	if (connected)
+	{
+		imageCapture = new QCameraImageCapture(camera);
+		camera->setCaptureMode(QCamera::CaptureStillImage);
+		camera->searchAndLock();
+		imageCapture->capture(qApp->applicationDirPath());
+		camera->unlock();
+	}
+}
+
+void MainWindow::on_recordButton_clicked()
+{
+	if (connected)
+	{
+		if (!recording)
 		{
-			QGraphicsItem* item = scene->selectedItems().at(0);
-			scene->removeItem(item);
-
-			for (int i = lines.size() - 1; i >= 0; i--)
-			{
-				profileLine* line = lines.at(i);
-
-				if (line->startBox == item || line->endBox == item)
-				{
-					lines.removeAt(i);
-					scene->removeItem(line);
-					delete line;
-				}
-			}
-			delete item;
+			recorder = new QMediaRecorder(camera);
+			connect(recorder, SIGNAL(error(QMediaRecorder::Error)), this, SLOT(cameraError(QCamera::Error)));
+			camera->setCaptureMode(QCamera::CaptureVideo);
+			recorder->setOutputLocation(QUrl(qApp->applicationDirPath()));
+			recorder->record();
+			recording = true;
+		}
+		else
+		{
+			recorder->stop();
+			recording = false;
 		}
 	}
 }
 
-void MainWindow::selectionChanged()
+void MainWindow::cameraError(QCamera::Error error)
 {
-	qDebug() << "Item selected";
+	qDebug() << error;
+
+	connected = false;
+	camera->stop();
+	ui->connectButton->setText("Connect");
 }
 
-void MainWindow::on_addButton_clicked()
+void MainWindow::recordError(QMediaRecorder::Error error)
 {
-	bool ok;
-	QString name = QInputDialog::getText(this, tr("Employee Name"), tr("Please insert employee's full name here:"), QLineEdit::Normal, "John Doe", &ok);
-	if (ok && !name.isEmpty())
-	{
-		profileBox* box = new profileBox();
-		box->init(name, this, scene);
-
-		if (scene->selectedItems().size() > 0)
-		{
-			profileLine* line = new profileLine();
-			line->initLine(box, scene->selectedItems().at(0));
-			scene->addItem(line);
-
-			lines.push_back(line);
-		}
-	}
+	qDebug() << recorder->errorString();
 }
