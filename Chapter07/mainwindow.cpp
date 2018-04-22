@@ -8,13 +8,12 @@ MainWindow::MainWindow(QWidget *parent) :
 	ui->setupUi(this);
 
 	// Get user's position (only work on mobile)
-	/*QGeoPositionInfoSource *source = QGeoPositionInfoSource::createDefaultSource(this);
+	QGeoPositionInfoSource *source = QGeoPositionInfoSource::createDefaultSource(this);
 	if (source)
 	{
-		connect(source, SIGNAL(positionUpdated(QGeoPositionInfo)),
-				this, SLOT(positionUpdated(QGeoPositionInfo)));
+		connect(source, &QGeoPositionInfoSource::positionUpdated, this, &MainWindow::positionUpdated);
 		source->startUpdates();
-	}*/
+	}
 
 	// Use C++ to add marker to the map
 	//QMetaObject::invokeMethod(qobject_cast<QObject*>(ui->quickWidget->rootObject()), "addMarker", Qt::AutoConnection, Q_ARG(QVariant, "Testing"), Q_ARG(QVariant, 40.7274175), Q_ARG(QVariant, -73.99835));
@@ -23,8 +22,8 @@ MainWindow::MainWindow(QWidget *parent) :
 	QGeoServiceProvider* serviceProvider = new QGeoServiceProvider("osm");
 	QGeoRoutingManager* routingManager = serviceProvider->routingManager();
 
-	connect(routingManager, SIGNAL(finished(QGeoRouteReply*)), this, SLOT(routeCalculated(QGeoRouteReply*)));
-	connect(routingManager, SIGNAL(error(QGeoRouteReply*,QGeoRouteReply::Error,QString)), this, SLOT(routeError(QGeoRouteReply*,QGeoRouteReply::Error,QString)));
+	connect(routingManager, &QGeoPositionInfoSource::finished, this, &MainWindow::routeCalculated);
+	connect(routingManager, &QGeoPositionInfoSource::error, this, &MainWindow::routeError);
 
 	QGeoRouteRequest request(QGeoCoordinate(40.675895,-73.9562151), QGeoCoordinate(40.6833154,-73.987715));
 	routingManager->calculateRoute(request);
