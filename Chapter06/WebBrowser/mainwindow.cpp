@@ -2,82 +2,82 @@
 #include "ui_mainwindow.h"
 
 MainWindow::MainWindow(QWidget *parent) :
-	QMainWindow(parent),
-	ui(new Ui::MainWindow)
+    QMainWindow(parent),
+    ui(new Ui::MainWindow)
 {
-	ui->setupUi(this);
+    ui->setupUi(this);
 
-	webview = new QWebEngineView(ui->webviewFrame);
+    webview = new QWebEngineView(ui->webviewFrame);
 
-	connect(webview, SIGNAL(loadProgress(int)), this, SLOT(webviewLoading(int)));
-	connect(webview, SIGNAL(loadFinished(bool)), this, SLOT(webviewLoaded()));
+    connect(webview, &QWebEngineView::loadProgress, this, &MainWindow::webviewLoading);
+    connect(webview, &QWebEngineView::loadFinished, this, &MainWindow::webviewLoaded);
 
-	loadPage();
+    loadPage();
 
-	// Enable cookie
-	QWebEngineProfile::defaultProfile()->setPersistentCookiesPolicy(QWebEngineProfile::ForcePersistentCookies);
+    // Enable cookie
+    QWebEngineProfile::defaultProfile()->setPersistentCookiesPolicy(QWebEngineProfile::ForcePersistentCookies);
 
-	// No cache
-	QWebEngineProfile::defaultProfile()->setHttpCacheType(QWebEngineProfile::NoCache);
+    // No cache
+    QWebEngineProfile::defaultProfile()->setHttpCacheType(QWebEngineProfile::NoCache);
 
-	// Delete all browsing history
-	QWebEngineProfile::defaultProfile()->clearAllVisitedLinks();
+    // Delete all browsing history
+    QWebEngineProfile::defaultProfile()->clearAllVisitedLinks();
 }
 
 MainWindow::~MainWindow()
 {
-	delete ui;
+    delete ui;
 }
 
 void MainWindow::paintEvent(QPaintEvent *event)
 {
-   QMainWindow::paintEvent(event);
+    QMainWindow::paintEvent(event);
 
-   webview->resize(ui->webviewFrame->size());
+    webview->resize(ui->webviewFrame->size());
 }
 
 void MainWindow::loadPage()
 {
-	QString url = ui->addressInput->text();
-	if (!url.startsWith("http://") && !url.startsWith("https://"))
-	{
-		url = "http://" + url;
-	}
-	ui->addressInput->setText(url);
-	webview->load(QUrl(url));
+    QString url = ui->addressInput->text();
+    if (!url.startsWith("http://") && !url.startsWith("https://"))
+    {
+	url = "http://" + url;
+    }
+    ui->addressInput->setText(url);
+    webview->load(QUrl(url));
 }
 
 void MainWindow::on_backButton_clicked()
 {
-	webview->back();
+    webview->back();
 }
 
 void MainWindow::on_forwardButton_clicked()
 {
-	webview->forward();
+    webview->forward();
 }
 
 void MainWindow::on_refreshButton_clicked()
 {
-	webview->reload();
+    webview->reload();
 }
 
 void MainWindow::on_goButton_clicked()
 {
-	loadPage();
+    loadPage();
 }
 
 void MainWindow::on_addressInput_returnPressed()
 {
-	loadPage();
+    loadPage();
 }
 
 void MainWindow::webviewLoading(int progress)
 {
-	ui->progressBar->setValue(progress);
+    ui->progressBar->setValue(progress);
 }
 
 void MainWindow::webviewLoaded()
 {
-	ui->addressInput->setText(webview->url().toString());
+    ui->addressInput->setText(webview->url().toString());
 }
