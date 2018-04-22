@@ -27,25 +27,26 @@ class MainWindow;
 
 class MainWindow : public QMainWindow
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
-	explicit MainWindow(QWidget *parent = 0);
-	~MainWindow();
+    explicit MainWindow(QWidget *parent = 0);
+    ~MainWindow();
+
+protected:
+    virtual void resizeEvent(QResizeEvent* event);
 
 private slots:
-	void on_loginButton_clicked();
-	void on_stackedWidget_currentChanged(int arg1);
-
-	void resizeEvent(QResizeEvent* event);
+    void on_loginButton_clicked();
+    void on_stackedWidget_currentChanged(int arg1);
 
 private:
-	Ui::MainWindow *ui;
-	QSqlDatabase db;
+    Ui::MainWindow *ui;
+    QSqlDatabase db;
 
-	QChartView *chartViewBar;
-	QChartView *chartViewPie;
-	QChartView *chartViewLine;
+    QChartView *chartViewBar;
+    QChartView *chartViewPie;
+    QChartView *chartViewLine;
 };
 
 #endif // MAINWINDOW_H
