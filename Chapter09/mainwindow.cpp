@@ -87,7 +87,7 @@ void MainWindow::on_recordButton_clicked()
 		if (!recording)
 		{
 			recorder = new QMediaRecorder(camera);
-			connect(recorder, SIGNAL(error(QMediaRecorder::Error)), this, SLOT(recordError(QMediaRecorder::Error)));
+			connect(recorder, SIGNAL(error(QMediaRecorder::Error)), this, SLOT(cameraError(QCamera::Error)));
 			camera->setCaptureMode(QCamera::CaptureVideo);
 			recorder->setOutputLocation(QUrl(qApp->applicationDirPath()));
 			recorder->record();
@@ -112,5 +112,5 @@ void MainWindow::cameraError(QCamera::Error error)
 
 void MainWindow::recordError(QMediaRecorder::Error error)
 {
-	qDebug() << error.errorString();
+	qDebug() << recorder->errorString();
 }
