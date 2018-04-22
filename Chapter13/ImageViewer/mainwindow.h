@@ -17,9 +17,10 @@ class MainWindow : public QMainWindow
 public:
 	explicit MainWindow(QWidget *parent = 0);
 	~MainWindow();
-
-	virtual void paintEvent(QPaintEvent *event);
 	void resizeImage();
+
+protected:
+	virtual void paintEvent(QPaintEvent *event);
 
 private slots:
 	void on_actionOpen_triggered();
