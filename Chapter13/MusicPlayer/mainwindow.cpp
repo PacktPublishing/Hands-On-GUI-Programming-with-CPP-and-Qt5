@@ -9,8 +9,8 @@ MainWindow::MainWindow(QWidget *parent) :
 
 	player = new QMediaPlayer(this);
 	player->setVolume(ui->volume->value());
-	connect(player, SIGNAL(stateChanged(QMediaPlayer::State)), this, SLOT(stateChanged(QMediaPlayer::State)));
-	connect(player, SIGNAL(positionChanged(qint64)), this, SLOT(positionChanged(qint64)));
+	connect(player, &QMediaPlayer::stateChanged, this, &MainWindow::stateChanged);
+	connect(player, &QMediaPlayer::positionChanged, this, &MainWindow::positionChanged);
 }
 
 MainWindow::~MainWindow()
@@ -41,9 +41,6 @@ void MainWindow::on_actionOpen_File_triggered()
 
 void MainWindow::on_playButton_clicked()
 {
-	if (player->state() == QMediaPlayer::StoppedState)
-		player->setPosition(100);
-
 	player->play();
 }
 
