@@ -34,7 +34,7 @@ void MainWindow::getFileList()
 	request.setUrl(ftpPath);
 
 	downloadFileListReply = manager->get(request);
-	connect(downloadFileListReply, SIGNAL(finished()), this, SLOT(downloadFileListFinished()));
+	connect(downloadFileListReply, &QNetworkReply::finished, this, &MainWindow::downloadFileListFinished);
 }
 
 void MainWindow::on_openButton_clicked()
@@ -65,8 +65,8 @@ void MainWindow::on_uploadButton_clicked()
 		request.setUrl(ftpPath);
 
 		uploadFileReply = manager->put(request, file);
-		connect(uploadFileReply, SIGNAL(uploadProgress(qint64,qint64)), this, SLOT(uploadFileProgress(qint64,qint64)));
-		connect(uploadFileReply, SIGNAL(finished()), this, SLOT(uploadFileFinished()));
+		connect(uploadFileReply, &QNetworkReply::uploadProgress, this, &MainWindow::uploadFileProgress);
+		connect(uploadFileReply, &QNetworkReply::finished, this, &MainWindow::uploadFileFinished);
 	}
 	else
 	{
@@ -99,8 +99,8 @@ void MainWindow::on_fileList_itemDoubleClicked(QListWidgetItem *item)
 		request.setUrl(ftpPath);
 
 		downloadFileReply = manager->get(request);
-		connect(downloadFileReply, SIGNAL(downloadProgress(qint64,qint64)), this, SLOT(downloadFileProgress(qint64,qint64)));
-		connect(downloadFileReply, SIGNAL(finished()), this, SLOT(downloadFileFinished()));
+		connect(downloadFileReply, &QNetworkReply::downloadProgress, this, &MainWindow::downloadFileProgress);
+		connect(downloadFileReply, &QNetworkReply::finished, this, &MainWindow::downloadFileFinished);
 	}
 	else
 	{
@@ -214,7 +214,7 @@ void MainWindow::uploadFileFinished()
 			QNetworkRequest request;
 			request.setUrl(ftpPath);
 			uploadFileListReply = manager->put(request, newFile);
-			connect(uploadFileListReply, SIGNAL(finished()), this, SLOT(uploadFileListFinished()));
+			connect(uploadFileListReply, &QNetworkReply::finished, this, &MainWindow::uploadFileListFinished);
 			file->close();
 		}
 
