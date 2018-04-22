@@ -98,6 +98,15 @@ MainWindow::~MainWindow()
 	delete ui;
 }
 
+void MainWindow::resizeEvent(QResizeEvent* event)
+{
+	QMainWindow::resizeEvent(event);
+
+	chartViewBar->resize(chartViewBar->parentWidget()->size());
+	chartViewPie->resize(chartViewPie->parentWidget()->size());
+	chartViewLine->resize(chartViewLine->parentWidget()->size());
+}
+
 void MainWindow::on_loginButton_clicked()
 {
 	ui->stackedWidget->setCurrentIndex(1);
@@ -108,13 +117,4 @@ void MainWindow::on_stackedWidget_currentChanged(int arg1)
 	if (arg1 == 1)
 	{
 	}
-}
-
-void MainWindow::resizeEvent(QResizeEvent* event)
-{
-	QMainWindow::resizeEvent(event);
-
-	chartViewBar->resize(chartViewBar->parentWidget()->size());
-	chartViewPie->resize(chartViewPie->parentWidget()->size());
-	chartViewLine->resize(chartViewLine->parentWidget()->size());
 }
