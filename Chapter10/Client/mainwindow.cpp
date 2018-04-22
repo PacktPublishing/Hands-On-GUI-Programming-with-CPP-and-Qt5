@@ -26,9 +26,9 @@ void MainWindow::on_connectButton_clicked()
 	{
 		socket = new QTcpSocket();
 
-		connect(socket, SIGNAL(connected()), this, SLOT(socketConnected()));
-		connect(socket, SIGNAL(disconnected()), this, SLOT(socketDisconnected()));
-		connect(socket, SIGNAL(readyRead()), this, SLOT(socketReadyRead()));
+		connect(socket, &QTcpSocket::connected, this, &MainWindow::socketConnected);
+		connect(socket, &QTcpSocket::disconnected, this, &MainWindow::socketDisconnected);
+		connect(socket, &QTcpSocket::readyRead, this, &MainWindow::socketReadyRead);
 
 		socket->connectToHost("127.0.0.1", 8001);
 	}
