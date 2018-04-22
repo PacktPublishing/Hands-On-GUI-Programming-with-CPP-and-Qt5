@@ -12,29 +12,29 @@ class MainWindow;
 
 class MainWindow : public QMainWindow
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
-	explicit MainWindow(QWidget *parent = 0);
-	~MainWindow();
-	void paintEvent(QPaintEvent *event);
+    explicit MainWindow(QWidget *parent = 0);
+    ~MainWindow();
+    void loadPage();
 
-	void loadPage();
+protected:
+    virtual void paintEvent(QPaintEvent *event);
 
 private slots:
-	void on_backButton_clicked();
-	void on_forwardButton_clicked();
-	void on_refreshButton_clicked();
-	void on_goButton_clicked();
-	void on_addressInput_returnPressed();
+    void on_backButton_clicked();
+    void on_forwardButton_clicked();
+    void on_refreshButton_clicked();
+    void on_goButton_clicked();
+    void on_addressInput_returnPressed();
 
-	void webviewLoading(int progress);
-	void webviewLoaded();
+    void webviewLoading(int progress);
+    void webviewLoaded();
 
 private:
-	Ui::MainWindow *ui;
-
-	QWebEngineView* webview;
+    Ui::MainWindow *ui;
+    QWebEngineView* webview;
 };
 
 #endif // MAINWINDOW_H
