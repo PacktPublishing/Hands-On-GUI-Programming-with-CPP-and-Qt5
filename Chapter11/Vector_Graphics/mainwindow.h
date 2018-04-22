@@ -18,9 +18,10 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
-
-    virtual void paintEvent(QPaintEvent *event);
     void paintAll(QSvgGenerator *generator = 0);
+
+protected:
+	virtual void paintEvent(QPaintEvent *event);
 
 private slots:
     void on_actionSave_as_SVG_triggered();
