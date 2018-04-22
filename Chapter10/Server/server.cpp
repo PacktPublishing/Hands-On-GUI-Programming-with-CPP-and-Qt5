@@ -10,7 +10,7 @@ void server::startServer()
 
 	chatServer = new QTcpServer();
 	chatServer->setMaxPendingConnections(10);
-	connect(chatServer, SIGNAL(newConnection()), this, SLOT(newClientConnection()));
+	connect(chatServer, &QTcpServer::newConnection, this, &server::newClientConnection);
 
 	if (chatServer->listen(QHostAddress::Any, 8001))
 	{
@@ -42,9 +42,9 @@ void server::newClientConnection()
 	QString ipAddress = client->peerAddress().toString();
 	int port = client->peerPort();
 
-	connect(client, SIGNAL(disconnected()), this, SLOT(socketDisconnected()));
-	connect(client, SIGNAL(readyRead()),this, SLOT(socketReadReady()));
-	connect(client, SIGNAL(stateChanged(QAbstractSocket::SocketState)), this, SLOT(socketStateChanged(QAbstractSocket::SocketState)));
+	connect(client, &QTcpSocket::disconnected, this, &server::socketDisconnected);
+	connect(client, &QTcpSocket::readyRead,this, &server::socketReadReady);
+	connect(client, &QTcpSocket::stateChanged, this, &server::socketStateChanged);
 
 	allClients->push_back(client);
 
