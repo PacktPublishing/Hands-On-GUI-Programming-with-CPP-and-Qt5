@@ -32,5 +32,3 @@ We will deal with the installation processes and details as we go through each c
 
 * [A 17 Hour C# Course with Intro to SQL and C# 7.0 [Video]](https://www.packtpub.com/application-development/17-hour-c-course-intro-sql-and-c-70-video?utm_source=github&utm_medium=repository&utm_campaign=9781788838832)
 
-### Suggestions and Feedback
-[Click here](https://docs.google.com/forms/d/e/1FAIpQLSe5qwunkGf6PUvzPirPDtuy1Du5Rlzew23UBp2S-P3wB-GcwQ/viewform) if you have any feedback or suggestions.
