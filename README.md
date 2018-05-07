@@ -23,7 +23,8 @@ In order to successfully execute all the codes and instructions in this book, yo
 * Qt 5.10
 * MariaDB 10.2 (or MySQL Connector)
 * Filezilla Server 0.9
- We will deal with the installation processes and details as we go through each chapter.
+
+We will deal with the installation processes and details as we go through each chapter.
 
 ## Related Products
 * [Mastering the C++17 STL](https://www.packtpub.com/application-development/mastering-c17-stl?utm_source=github&utm_medium=repository&utm_campaign=9781787126824)
