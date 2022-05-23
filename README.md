@@ -8,7 +8,7 @@ All of the code is organized into folders. Each folder starts with a number foll
 All code files have been placed in their respective folder.
 
 The code will look like the following:
-```
+```cpp
 void MainWindow::test()
 {
   int amount = 100;
