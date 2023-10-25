@@ -29,6 +29,10 @@ In order to successfully execute all the codes and instructions in this book, yo
 
 We will deal with the installation processes and details as we go through each chapter.
 
+## Errata
+* Page 33: Point number 9 should be as follows:  
+  _This window contains two editors. Action Editor and the Signals & Slots Editor, which can be accessed from the tabs below the window. The action editor is where you create actions that can be added to a menu bar or toolbar in your program's UI._
+
 ## Related Products
 * [Mastering the C++17 STL](https://www.packtpub.com/application-development/mastering-c17-stl?utm_source=github&utm_medium=repository&utm_campaign=9781787126824)
 
